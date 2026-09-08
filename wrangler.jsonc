@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "dockhop",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-06-12",
+  "compatibility_flags": [
+    // Next.js server code expects Node built-ins.
+    "nodejs_compat",
+    // Without this, a fetch to the worker's own hostname is short-circuited
+    // back into the worker instead of leaving for the public internet. The
+    // GBFS feed, Valhalla and the geocoder are all outbound fetches.
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Cloudflare creates the DNS record and the certificate for this on deploy,
+  // so the hostname is part of the config rather than a dashboard click.
+  "routes": [
+    {
+      "pattern": "dockhop.dwarakesh.com",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

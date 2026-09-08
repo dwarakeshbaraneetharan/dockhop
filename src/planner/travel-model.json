@@ -1,0 +1,12 @@
+{
+  "fixedSeconds": 152.6,
+  "secondsPerMeter": 0.44435,
+  "quantile": 0.85,
+  "calibration": {
+    "source": "Citi Bike 202604 trip history",
+    "trips": 987950,
+    "medianAbsErrorSeconds": 235.4,
+    "withinEstimateShare": 0.8543,
+    "fittedAt": "2026-09-04"
+  }
+}

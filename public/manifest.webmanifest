@@ -1,0 +1,13 @@
+{
+  "name": "DockHop",
+  "short_name": "DockHop",
+  "description": "Citi Bike routes with swap points, so a long ride never crosses the free-ride limit.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

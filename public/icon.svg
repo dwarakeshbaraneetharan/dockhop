@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DockHop">
+  <rect width="512" height="512" rx="112" fill="#0f172a"/>
+  <!-- Two docks with a hop between them: the whole idea of the app. -->
+  <path d="M136 336 C 136 196, 376 196, 376 336"
+        fill="none" stroke="#38bdf8" stroke-width="34" stroke-linecap="round"
+        stroke-dasharray="20 30"/>
+  <circle cx="136" cy="356" r="46" fill="#ffffff"/>
+  <circle cx="376" cy="356" r="46" fill="#22c55e"/>
+</svg>

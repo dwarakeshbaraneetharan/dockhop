@@ -1,0 +1,71 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx tsc --noEmit
+
+      - run: npm run lint
+
+      # The leg cap is asserted across 200 generated station networks, so this
+      # job fails if the planner could ever route someone past a free-ride limit.
+      - run: npx vitest run
+
+      - run: npm run build
+
+  # Browser tests, kept separate because they need browser downloads. They cover
+  # a class of bug the unit tests cannot see: MapLibre only fails to render once
+  # Next.js has actually bundled it, and it fails without logging an error.
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      # Chromium only: MapLibre needs WebGL and headless WebKit on Linux has
+      # none, so the WebKit project is run locally instead. Endpoints are
+      # stubbed, so a Citi Bike outage cannot fail this job, and the live-data
+      # specs are opt-in via RUN_LIVE.
+      # Roughly 13 minutes: two workers on a 2 vCPU runner, and every test pays
+      # for software WebGL plus a real vector style over the network. The cap is
+      # a hang guard, so it is set well clear of that rather than close to it.
+      - run: npx playwright test --project=mobile --project=desktop
+        timeout-minutes: 25
+
+      # Traces and screenshots for whatever failed, which is the only way to see
+      # a rendering bug after the fact.
+      - uses: actions/upload-artifact@v5
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
